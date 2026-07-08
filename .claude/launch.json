@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ecocoro-server",
+      "runtimeExecutable": "./venv/bin/python",
+      "runtimeArgs": ["run_server.py", "--llm-endpoint", "http://39.110.248.77:64650/v1"],
+      "port": 8000
+    }
+  ]
+}

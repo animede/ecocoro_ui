@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ecocoro 画像生成</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="app-header">
+  <h1>ecocoro 画像生成</h1>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="t2i">Text to Image</button>
+    <button class="tab-btn" data-tab="i2i">Image to Image</button>
+    <button class="tab-btn" data-tab="edit">Edit</button>
+    <button class="tab-btn" data-tab="gallery">ギャラリー</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- T2I -->
+  <section class="tab-panel active" id="panel-t2i">
+    <div class="form-col">
+      <label>プロンプト</label>
+      <textarea id="t2i-prompt" rows="4" placeholder="例: 青い髪の女の子"></textarea>
+      <div class="btn-row">
+        <button class="secondary" id="t2i-expand">プロンプト拡張</button>
+        <button class="secondary" id="t2i-ja2en">日→英翻訳</button>
+        <button class="secondary" id="t2i-en2ja">英→日翻訳</button>
+      </div>
+
+      <label>ネガティブプロンプト (任意)</label>
+      <textarea id="t2i-negative" rows="2" placeholder="除外したい要素"></textarea>
+
+      <div class="param-grid">
+        <label>幅 <input type="number" id="t2i-width" value="1024" step="64"></label>
+        <label>高さ <input type="number" id="t2i-height" value="1024" step="64"></label>
+        <label>Steps <input type="number" id="t2i-steps" value="28" min="1" max="100"></label>
+        <label>Guidance <input type="number" id="t2i-guidance" value="3.5" step="0.1"></label>
+        <label>Seed (任意) <input type="number" id="t2i-seed" placeholder="ランダム"></label>
+        <label>生成枚数 <input type="number" id="t2i-num" value="1" min="1" max="4"></label>
+      </div>
+
+      <button class="primary" id="t2i-generate">生成</button>
+    </div>
+
+    <div class="result-col">
+      <div id="t2i-status" class="status"></div>
+      <div id="t2i-results" class="result-grid"></div>
+    </div>
+  </section>
+
+  <!-- I2I -->
+  <section class="tab-panel" id="panel-i2i">
+    <div class="form-col">
+      <label>参照画像</label>
+      <div class="dropzone" id="i2i-dropzone">
+        <p>ここに画像をドラッグ&ドロップ、またはクリックして選択</p>
+        <input type="file" id="i2i-file" accept="image/*" hidden>
+        <img id="i2i-preview" class="preview-img" hidden>
+      </div>
+
+      <label>プロンプト</label>
+      <textarea id="i2i-prompt" rows="4" placeholder="例: 同じ構図で背景を夜にする"></textarea>
+      <div class="btn-row">
+        <button class="secondary" id="i2i-expand">プロンプト拡張</button>
+        <button class="secondary" id="i2i-ja2en">日→英翻訳</button>
+        <button class="secondary" id="i2i-en2ja">英→日翻訳</button>
+      </div>
+
+      <label>ネガティブプロンプト (任意)</label>
+      <textarea id="i2i-negative" rows="2"></textarea>
+
+      <div class="param-grid">
+        <label>幅 (任意) <input type="number" id="i2i-width" step="64" placeholder="自動"></label>
+        <label>高さ (任意) <input type="number" id="i2i-height" step="64" placeholder="自動"></label>
+        <label>Steps <input type="number" id="i2i-steps" value="28" min="1" max="100"></label>
+        <label>Guidance <input type="number" id="i2i-guidance" value="3.5" step="0.1"></label>
+        <label>Seed (任意) <input type="number" id="i2i-seed" placeholder="ランダム"></label>
+        <label>生成枚数 <input type="number" id="i2i-num" value="1" min="1" max="4"></label>
+      </div>
+
+      <button class="primary" id="i2i-generate">生成</button>
+    </div>
+
+    <div class="result-col">
+      <div id="i2i-status" class="status"></div>
+      <div id="i2i-results" class="result-grid"></div>
+    </div>
+  </section>
+
+  <!-- Edit -->
+  <section class="tab-panel" id="panel-edit">
+    <div class="form-col">
+      <label>編集対象画像</label>
+      <div class="dropzone" id="edit-dropzone">
+        <p>ここに画像をドラッグ&ドロップ、またはクリックして選択</p>
+        <input type="file" id="edit-file" accept="image/*" hidden>
+        <img id="edit-preview" class="preview-img" hidden>
+      </div>
+
+      <label>編集指示</label>
+      <textarea id="edit-instruction" rows="4" placeholder="例: 髪の色を赤にして、背景はそのままにして"></textarea>
+      <div class="btn-row">
+        <button class="secondary" id="edit-expand">プロンプト拡張</button>
+        <button class="secondary" id="edit-ja2en">日→英翻訳</button>
+        <button class="secondary" id="edit-en2ja">英→日翻訳</button>
+      </div>
+
+      <label>ネガティブプロンプト (任意)</label>
+      <textarea id="edit-negative" rows="2"></textarea>
+
+      <div class="param-grid">
+        <label>幅 (任意) <input type="number" id="edit-width" step="64" placeholder="自動"></label>
+        <label>高さ (任意) <input type="number" id="edit-height" step="64" placeholder="自動"></label>
+        <label>Steps <input type="number" id="edit-steps" value="28" min="1" max="100"></label>
+        <label>Guidance <input type="number" id="edit-guidance" value="3.5" step="0.1"></label>
+        <label>Seed (任意) <input type="number" id="edit-seed" placeholder="ランダム"></label>
+        <label>生成枚数 <input type="number" id="edit-num" value="1" min="1" max="4"></label>
+      </div>
+
+      <button class="primary" id="edit-generate">生成</button>
+    </div>
+
+    <div class="result-col">
+      <div id="edit-status" class="status"></div>
+      <div id="edit-results" class="result-grid"></div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="tab-panel" id="panel-gallery">
+    <div class="gallery-toolbar">
+      <button class="secondary" id="gallery-refresh">再読み込み</button>
+    </div>
+    <div id="gallery-status" class="status"></div>
+    <div id="gallery-grid" class="gallery-grid"></div>
+  </section>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
