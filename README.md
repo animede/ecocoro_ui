@@ -7,6 +7,8 @@
 
 ## ライセンス・利用上の注意
 
+本リポジトリのソースコードは [Apache License 2.0](LICENSE) で提供します(著作権者: © 2026 YUZUKI (animede)、[NOTICE](NOTICE) 参照)。
+
 - `alfredplpl/ecocoro-preview-1` 本体、ベースモデル `black-forest-labs/FLUX.2-klein-base-4B` とも **Apache License 2.0** で提供されており、商用利用を含め法的な利用制限はありません。
 - ただし両モデルカードには、以下のような生成内容に関する利用ガイドラインが明記されています(ライセンス条項自体を制限するものではありませんが、遵守が求められます)。
   - 適用法に違反する用途、児童搾取・CSAMの生成/取得/拡散
